@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_160001) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_08_115151) do
   create_table "contents", force: :cascade do |t|
     t.string "content"
     t.integer "votes_count", default: 0

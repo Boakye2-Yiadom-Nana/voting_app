@@ -12,3 +12,4 @@ class Option < ApplicationRecord
 
         (votes_count.to_f / poll.total_votes * 100).round(1)
     end
+end

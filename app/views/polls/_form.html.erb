@@ -1,0 +1,44 @@
+<%= form_with model: poll, local: true do |f| %>
+  <%# Display validation errors %>
+  <% if poll.errors.any? %>
+    <div style="color: red; padding: 10px; border: 1px solid red; margin-bottom: 20px; border-radius: 5px;">
+      <h3><%= pluralize(poll.errors.count, "error") %> prohibited this poll from being saved:</h3>
+      <ul>
+        <% poll.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :title, "Poll Question:" %>
+    <%= f.text_field :title, style: "width: 100%; padding: 10px; font-size: 16px; margin-top: 5px;", placeholder: "e.g., What's your favorite programming language?" %>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :description, "Description (optional):" %>
+    <%= f.text_area :description, rows: 3, style: "width: 100%; padding: 10px; font-size: 16px; margin-top: 5px;", placeholder: "Add more details about this poll..." %>
+  </div>
+
+  <h3>Options:</h3>
+  
+  <%# fields_for creates nested form fields for associated options %>
+  <%= f.fields_for :options do |option_fields| %>
+    <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+      <%= option_fields.text_field :content, style: "flex: 1; padding: 10px; font-size: 16px;", placeholder: "Enter an option" %>
+      
+      <%# Allow removing options when editing %>
+      <% if option_fields.object.persisted? %>
+        <%= option_fields.check_box :_destroy %>
+        <%= option_fields.label :_destroy, "Remove" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div style="margin-top: 20px;">
+    <%= f.submit poll.new_record? ? "Create Poll" : "Update Poll", 
+                 style: "padding: 10px 30px; background: #28a745; color: white; border: none; font-size: 16px; cursor: pointer; border-radius: 5px;" %>
+    <%= link_to "Cancel", polls_path, style: "margin-left: 15px; color: #6c757d;" %>
+  </div>
+<% end %>

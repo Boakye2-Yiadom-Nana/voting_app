@@ -1,16 +1,16 @@
 class Vote < ApplicationRecord
-  belongs_to :option
+  belongs_to :option, counter_cache: :votes_count
 
-  validates :voter_ip, prensence: true
+  validates :voter_ip, presence: true
 
-  validate :check_duplicate_votes_count
+  validate :check_duplicate_vote
 
   private
 
   def check_duplicate_vote
     poll = option.poll
 
-    existing_vote = vote.joins(:option)
+    existing_vote = Vote.joins(:option)
                         .where(options: { poll_id: poll.id })
                         .where(voter_ip: voter_ip)
                         .exists?

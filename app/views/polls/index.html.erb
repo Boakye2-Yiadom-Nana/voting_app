@@ -1,0 +1,29 @@
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1>All Polls</h1>
+  
+  <%= link_to "Create New Poll", new_poll_path, style: "display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px;" %>
+  
+  <% if @polls.empty? %>
+    <p>No polls yet. Create one!</p>
+  <% else %>
+    <% @polls.each do |poll| %>
+      <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 5px;">
+        <h2><%= poll.title %></h2>
+        
+        <% if poll.description.present? %>
+          <p><%= poll.description %></p>
+        <% end %>
+        
+        <p><strong>Total votes:</strong> <%= poll.total_votes %></p>
+        
+        <div>
+          <%= link_to "View Results", poll_path(poll), style: "color: #007bff; margin-right: 15px;" %>
+          <%= link_to "Edit", edit_poll_path(poll), style: "color: #28a745; margin-right: 15px;" %>
+          <%= link_to "Delete", poll_path(poll), 
+                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                      style: "color: #dc3545;" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

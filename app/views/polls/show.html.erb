@@ -1,0 +1,57 @@
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1><%= @poll.title %></h1>
+  
+  <% if @poll.description.present? %>
+    <p style="color: #666; font-size: 18px;"><%= @poll.description %></p>
+  <% end %>
+  
+  <p><strong>Total votes:</strong> <%= @poll.total_votes %></p>
+  
+  <hr style="margin: 20px 0;">
+  
+  <% if @voted %>
+    <%# Show results if already voted %>
+    <h2>Results:</h2>
+    
+    <% @poll.options.each do |option| %>
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+          <strong><%= option.content %></strong>
+          <span><%= option.votes_count %> votes (<%= option.percentage %>%)</span>
+        </div>
+        
+        <%# Visual progress bar %>
+        <div style="width: 100%; background: #e9ecef; height: 30px; border-radius: 5px; overflow: hidden;">
+          <div style="width: <%= option.percentage %>%; background: #007bff; height: 100%; transition: width 0.3s;"></div>
+        </div>
+      </div>
+    <% end %>
+    
+    <p style="color: #28a745; font-weight: bold;">✓ You have already voted on this poll</p>
+    
+  <% else %>
+    <%# Show voting form if not voted yet %>
+    <h2>Cast Your Vote:</h2>
+    
+    <%= form_with url: vote_poll_path(@poll), method: :post, local: true do |f| %>
+      <% @poll.options.each do |option| %>
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; padding: 15px; border: 2px solid #ddd; border-radius: 5px; cursor: pointer; transition: all 0.2s;"
+                 onmouseover="this.style.borderColor='#007bff'; this.style.background='#f8f9fa';"
+                 onmouseout="this.style.borderColor='#ddd'; this.style.background='white';">
+            <%= radio_button_tag 'option_id', option.id, false, style: "margin-right: 10px;" %>
+            <%= option.content %>
+          </label>
+        </div>
+      <% end %>
+      
+      <div style="margin-top: 20px;">
+        <%= f.submit "Submit Vote", style: "padding: 12px 30px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; border-radius: 5px;" %>
+      </div>
+    <% end %>
+  <% end %>
+  
+  <div style="margin-top: 30px;">
+    <%= link_to "← Back to All Polls", polls_path, style: "color: #007bff;" %>
+  </div>
+</div>
